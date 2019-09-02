@@ -1,0 +1,21 @@
+<h3>Dynamic Columns</h3>
+<p-table [columns]="cols" [value]="statusAtualNfe" *ngIf="statusAtualNfe">
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 80px;">Versão</th>
+      <th>Autorizador</th>
+      <th>Data/Hora consulta</th>
+      <th style="width: 80px;">Status</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-nfe>
+    <tr style="text-align: center;">
+      <td>{{nfe.versao}}</td>
+      <td>{{nfe.autorizador}}</td>
+      <td>{{nfe.dataHoraStatus}}</td>
+      <td [ngStyle]="{'color': verificaCorStatus(nfe.status)}" [attr.title]="verificaTitleStatus(nfe.status)"><i
+          class="pi pi-circle-on"></i></td>
+      <!--car.color-->
+    </tr>
+  </ng-template>
+</p-table>
