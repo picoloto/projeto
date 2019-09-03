@@ -1,14 +1,69 @@
 <div class="content">
   <div class="p-grid">
-    <div class="p-col-6">
-      <p-panel header="Title" class="panel-custom">
-        <app-generic-table [statusAtualNfe]="statusAtualNfe"></app-generic-table>
+
+    <div class="p-col-12 p-lg-6">
+      <p-panel class="panel-custom">
+        <p-header>
+          <div class="p-grid">
+            <div class="p-col">
+              <span class="ui-panel-title">Status dos serviços de Nfe</span>
+              <br>
+              <span class="subtitle">
+                <span *ngIf="dataHoraConsulta && !carregandoStatusAtualNfe">
+                  Data/Hora consulta: {{dataHoraConsulta | dataHora}}
+                </span>
+                <app-generic-loading width="17px" height="17px" *ngIf="carregandoStatusAtualNfe"></app-generic-loading>
+              </span>
+            </div>
+            <div class="p-col-fixed coluna-fixa-botoes-titulo-panel">
+              <button pButton type="button" icon="pi pi-refresh" class="ui-button-rounded ui-button-secondary"
+                (click)="recarregarNfeAtualClick()"></button>
+            </div>
+          </div>
+        </p-header>
+
+        <div style="width: 100%; margin-bottom: 8px;" *ngIf="estados && estados.length > 0">
+          <p-dropdown [options]="estados" filter="true" placeholder="Filtrar por estado" [showClear]="true"
+            [style]="{'width': '178px'}" (onChange)="onChangeEstado($event)"></p-dropdown>
+        </div>
+
+        <app-generic-loading width="30px" height="30px" *ngIf="carregandoStatusAtualNfe"></app-generic-loading>
+
+        <div class="p-grid" *ngIf="!carregandoStatusAtualNfe">
+          <div class="p-col-12 p-sm-6">
+            <b class="versao">Versão {{numeroVersaoAntiga}}</b>
+            <app-generic-table [statusAtualNfe]="statusAtualNfeAntiga"></app-generic-table>
+          </div>
+          <div class="p-col-12 p-sm-6">
+            <b class="versao">Versão {{numeroVersaoNova}}</b>
+            <app-generic-table [statusAtualNfe]="statusAtualNfeNova"></app-generic-table>
+          </div>
+        </div>
       </p-panel>
     </div>
-    <div class="p-col-6">
-      <p-panel header="Title" class="panel-custom">
-        Content
+
+    <div class="p-col-12 p-lg-6">
+      <p-panel class="panel-custom">
+        <p-header>
+          <div class="p-grid">
+            <div class="p-col" style="display: flex; align-items: center;">
+              <span class="ui-panel-title">Indisponibilidade dos serviços de Nfe</span>
+            </div>
+            <div class="p-col-fixed coluna-fixa-botoes-titulo-panel">
+              <button pButton type="button" icon="pi pi-refresh" class="ui-button-rounded ui-button-secondary"
+                (click)="getIndisponibilidade()"></button>
+            </div>
+          </div>
+        </p-header>
+
+        <app-generic-loading width="30px" height="30px" *ngIf="carregandoIndisponibilidade"></app-generic-loading>
+
+        <p-chart type="doughnut" [data]="indisponibilidades" [options]="opcoesGrafico"
+          *ngIf="!carregandoIndisponibilidade">
+        </p-chart>
+
       </p-panel>
     </div>
+
   </div>
 </div>

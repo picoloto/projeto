@@ -1,32 +1,34 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
-import { DashboardComponent } from './dashboard.component';
 import { CommonModule } from '@angular/common';
 
+import { DashboardComponent } from './dashboard.component';
+
 import { PanelModule } from 'primeng/panel';
-import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { ChartModule } from 'primeng/chart';
+import { DropdownModule } from 'primeng/dropdown';
 
-import { GenericTableComponent } from 'src/app/core/generic-table/generic-table.component';
-
+import { GenericLoadingModule } from 'src/app/core/generic-loading/generic-loading.module';
+import { GenericTableModule } from 'src/app/core/generic-table/generic-table.module';
+import { DataHoraPipe } from 'src/app/core/pipes/data-hora.pipe';
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    GenericTableComponent
+    DataHoraPipe
   ],
   imports: [
     CommonModule,
     PanelModule,
-    TableModule,
+    ButtonModule,
+    ChartModule,
+    DropdownModule,
+    GenericLoadingModule,
+    GenericTableModule,
     RouterModule.forChild([
       { path: '', component: DashboardComponent }
     ])
-  ],
-  exports: [
-    PanelModule,
-    TableModule,
-    RouterModule
   ],
   providers: [],
   bootstrap: [DashboardComponent]

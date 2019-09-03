@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { ToolbarComponent } from './core/toolbar/toolbar.component';
 import { HttpClientModule } from '@angular/common/http';
 
-
 @NgModule({
   declarations: [
     AppComponent,

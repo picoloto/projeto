@@ -32,15 +32,9 @@ public class StatusNfeResource {
 		return ResponseEntity.ok(list);
 	}
 
-	@GetMapping(value = "/autorizadoresVersaoAntiga")
-	public ResponseEntity<List<String>> buscaAutorizadoresVersaoAntiga() {
-		List<String> ufsVersaoAntiga = JsoupService.verificaStatusDoServico().getUfsVersaoAntiga();
-		return ResponseEntity.ok(ufsVersaoAntiga);
-	}
-
-	@GetMapping(value = "/autorizadoresVersaoNova")
-	public ResponseEntity<List<String>> buscaAutorizadoresVersaoNova() {
-		List<String> ufsVersaoNova = JsoupService.verificaStatusDoServico().getUfsVersaoNova();
+	@GetMapping(value = "/listaAutorizadores")
+	public ResponseEntity<List<String>> buscaAutorizadores() {
+		List<String> ufsVersaoNova = JsoupService.verificaStatusDoServico().getUfsVersaoAntiga();
 		return ResponseEntity.ok(ufsVersaoNova);
 	}
 
