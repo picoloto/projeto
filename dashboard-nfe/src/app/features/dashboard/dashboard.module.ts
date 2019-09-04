@@ -8,14 +8,18 @@ import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { ChartModule } from 'primeng/chart';
 import { DropdownModule } from 'primeng/dropdown';
+import { TableModule } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
+import { CalendarModule } from 'primeng/calendar';
 
-import { GenericLoadingModule } from 'src/app/core/generic-loading/generic-loading.module';
-import { GenericTableModule } from 'src/app/core/generic-table/generic-table.module';
 import { DataHoraPipe } from 'src/app/core/pipes/data-hora.pipe';
+import { GenericLoadingModule } from 'src/app/core/generic-loading/generic-loading.module';
+import { StatusTableComponent } from './components/status-table/status-table.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
+    StatusTableComponent,
     DataHoraPipe
   ],
   imports: [
@@ -24,8 +28,10 @@ import { DataHoraPipe } from 'src/app/core/pipes/data-hora.pipe';
     ButtonModule,
     ChartModule,
     DropdownModule,
+    TableModule,
+    DialogModule,
+    CalendarModule,
     GenericLoadingModule,
-    GenericTableModule,
     RouterModule.forChild([
       { path: '', component: DashboardComponent }
     ])

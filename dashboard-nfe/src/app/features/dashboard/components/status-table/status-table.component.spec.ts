@@ -1,21 +1,21 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { GenericTableComponent } from './generic-table.component';
+import { StatusTableComponent } from './status-table.component';
 
-describe('GenericTableComponent', () => {
+describe('StatusTableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
       ],
       declarations: [
-        GenericTableComponent
+        StatusTableComponent
       ],
     }).compileComponents();
   }));
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(GenericTableComponent);
+    const fixture = TestBed.createComponent(StatusTableComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });

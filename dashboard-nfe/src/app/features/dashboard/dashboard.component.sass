@@ -1,12 +1,11 @@
 .panel-custom::ng-deep
-    .ui-panel 
+    .ui-panel
         -webkit-box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2)
         -moz-box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2)
         box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2)
     .ui-panel-titlebar
         border: none
         border-radius: 3px
-        height: 70.5px
     .ui-panel-content
         border: none
         border-radius: 3px
@@ -25,3 +24,16 @@
     width: 55px
     display: flex
     align-content: center
+
+.panel-no-padding::ng-deep
+    .ui-panel-content
+        padding: 0 !important
+.footer-custom
+    position: fixed
+    left: 0
+    bottom: 0
+    width: 100%
+    padding: 8px
+    text-align: start
+    background-color: white
+    border-top: 1px solid #f4f4f4

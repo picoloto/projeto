@@ -8,13 +8,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Service;
 
 import com.picoloto.projetoviasoft.domain.DadosRecuperados;
-import com.picoloto.projetoviasoft.services.utils.JSOUP;
 
+@Service
 public class JsoupService {
 
-	public static DadosRecuperados verificaStatusDoServico() {
+	public DadosRecuperados verificaStatusDoServico() {
 		List<String> versoes = new ArrayList<>();
 		List<String> ufsVersaoAntiga = new ArrayList<>();
 		List<String> imgsVersaoAntiga = new ArrayList<>();
@@ -33,35 +34,33 @@ public class JsoupService {
 					.select("tr");
 
 			for (Element cap : captions) {
-				versoes.add(JSOUP.buscaVersoes(cap));
+				versoes.add(buscaVersoes(cap));
 			}
 			dadosRecuperados.setVersoes(versoes);
 
 			for (Element tr : trVersaoAntiga) {
-				if (JSOUP.buscaUfs(tr) != null) {
-					ufsVersaoAntiga.add(JSOUP.buscaUfs(tr));
+				if (buscaUfs(tr) != null) {
+					ufsVersaoAntiga.add(buscaUfs(tr));
 				}
 
-				if (JSOUP.buscaStatus(tr) != null) {
-					imgsVersaoAntiga.add(JSOUP.buscaStatus(tr));
+				if (buscaStatus(tr) != null) {
+					imgsVersaoAntiga.add(buscaStatus(tr));
 				}
 			}
 			dadosRecuperados.setUfsVersaoAntiga(ufsVersaoAntiga);
 			dadosRecuperados.setImgsVersaoAntiga(imgsVersaoAntiga);
 
 			for (Element tr : trVersaoNova) {
-				if (JSOUP.buscaUfs(tr) != null) {
-					ufsVersaoNova.add(JSOUP.buscaUfs(tr));
+				if (buscaUfs(tr) != null) {
+					ufsVersaoNova.add(buscaUfs(tr));
 				}
 
-				if (JSOUP.buscaStatus(tr) != null) {
-					imgsVersaoNova.add(JSOUP.buscaStatus(tr));
+				if (buscaStatus(tr) != null) {
+					imgsVersaoNova.add(buscaStatus(tr));
 				}
 			}
 			dadosRecuperados.setUfsVersaoNova(ufsVersaoNova);
 			dadosRecuperados.setImgsVersaoNova(imgsVersaoNova);
-
-			System.out.println(dadosRecuperados.toString());
 
 			return dadosRecuperados;
 		} catch (IOException e) {
@@ -69,5 +68,32 @@ public class JsoupService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public String buscaVersoes(Element cap) {
+		String[] parts = cap.text().split("Vers");
+		return parts[1].trim().replaceAll("[^0-9?!\\.]", "");
+	}
+
+	public String buscaUfs(Element tr) {
+		if (tr.select("td").first() != null) {
+			return tr.select("td").first().text();
+		}
+		return null;
+	}
+
+	public String buscaStatus(Element tr) {
+		if (tr.select("td").size() > 0) {
+			if (tr.select("td").get(5).select("img").attr("src").trim().contains("verde")) {
+				return "ON";
+			} else if (tr.select("td").get(5).select("img").attr("src").trim().contains("amarela")) {
+				return "WAIT";
+			} else if (tr.select("td").get(5).select("img").attr("src").trim().contains("vermelho")) {
+				return "OFF";
+			} else {
+				return "NONE";
+			}
+		}
+		return null;
 	}
 }

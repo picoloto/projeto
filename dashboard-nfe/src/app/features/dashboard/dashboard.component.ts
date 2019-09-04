@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from './services/dashboard.service';
 import { Title } from '@angular/platform-browser';
+import { CALENDARPTBR } from 'src/app/core/utils/calendar-ptbr';
+import * as moment from 'moment';
+import 'moment/locale/pt-br';
+import { FormataStatus } from 'src/app/core/utils/formata-status';
+import { TratamentoErrosService } from 'src/app/core/http/tratamento-erros.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,34 +25,29 @@ export class DashboardComponent implements OnInit {
 
   // Indisponibilidade
   carregandoIndisponibilidade = false;
-  indisponibilidades;
-  opcoesGrafico;
-  coresGrafico = [];
+  indisponibilidades = [];
 
   // Filtro de estados
   estados = [];
 
+  // historico
+  statusHistoricoNfe = [];
+  carregandoHistoricoNfe = false;
+  modalHistorico = false;
+  ptbr = CALENDARPTBR;
+
   constructor(
     private dashboardService: DashboardService,
+    private tratamentoErrosService: TratamentoErrosService,
     private titleService: Title
   ) {
   }
 
   ngOnInit() {
     this.setTituloAbaNavegador('Dashboard NFe');
-    this.montaOpcoesGrafico();
-    this.montaCoresGrafico();
     this.getStatusAtualNfe(null);
     this.getIndisponibilidade();
     this.getAutorizadores();
-
-
-    /*
-    this.dashboardService.getStatusAtualNfePorUf()
-      .subscribe(r => console.log('Status Atual por UF(AM): ', r));
-
-    this.dashboardService.getStatusNfePorDataHora()
-      .subscribe(r => console.log('Status por DataHora(2019-09-01 15:35:00): ', r));*/
   }
 
   setTituloAbaNavegador(titulo: string) {
@@ -57,34 +57,6 @@ export class DashboardComponent implements OnInit {
   recarregarNfeAtualClick() {
     this.getStatusAtualNfe(null);
     this.getAutorizadores();
-  }
-
-  montaOpcoesGrafico() {
-    this.opcoesGrafico = {
-      legend: {
-        position: 'bottom'
-      }
-    };
-  }
-
-  montaCoresGrafico() {
-    this.coresGrafico = [
-      '#ff5252',
-      '#404040',
-      '#484848',
-      '#505050',
-      '#585858',
-      '#606060',
-      '#686868',
-      '#696969',
-      '#707070',
-      '#787878',
-      '#808080',
-      '#888888',
-      '#909090',
-      '#989898',
-      '#A0A0A0'
-    ];
   }
 
   getStatusAtualNfe(uf) {
@@ -105,7 +77,7 @@ export class DashboardComponent implements OnInit {
         }
         this.carregandoStatusAtualNfe = false;
       }, error => {
-        alert(error);
+        this.tratamentoErrosService.handleError(error);
         this.carregandoStatusAtualNfe = false;
       });
   }
@@ -114,23 +86,15 @@ export class DashboardComponent implements OnInit {
     this.carregandoIndisponibilidade = true;
     this.dashboardService.getIndisponibilidade()
       .subscribe(indisponibilidades => {
-        const labelsGrafico = [];
-        const datasetsGrafico = [];
-        const dataGrafico = [];
+        this.indisponibilidades = [];
         if (indisponibilidades && indisponibilidades.length > 0) {
           indisponibilidades.forEach(i => {
-            labelsGrafico.push(i[0]);
-            dataGrafico.push(i[1]);
+            this.indisponibilidades.push({ uf: i[0], quantidade: i[1] });
           });
-          datasetsGrafico.push({ data: dataGrafico, backgroundColor: this.coresGrafico });
         }
-        this.indisponibilidades = {
-          datasets: datasetsGrafico,
-          labels: labelsGrafico
-        };
         this.carregandoIndisponibilidade = false;
       }, error => {
-        alert(error);
+        this.tratamentoErrosService.handleError(error);
         this.carregandoIndisponibilidade = false;
       });
   }
@@ -145,7 +109,7 @@ export class DashboardComponent implements OnInit {
           });
         }
       }, error => {
-        alert(error);
+        this.tratamentoErrosService.handleError(error);
       });
   }
 
@@ -157,4 +121,28 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  exibeModalHistorico() {
+    this.modalHistorico = true;
+  }
+
+  onSelectData(e) {
+    this.carregandoHistoricoNfe = true;
+    this.statusHistoricoNfe = [];
+    this.dashboardService.getStatusNfePorDataHora(moment(e).format('YYYY-MM-DD'))
+      .subscribe(nfes => {
+        this.statusHistoricoNfe = nfes;
+        this.carregandoHistoricoNfe = false;
+      }, error => {
+        this.tratamentoErrosService.handleError(error);
+        this.carregandoHistoricoNfe = false;
+      });
+  }
+
+  verificaCorStatus(status) {
+    return FormataStatus.retornaCor(status);
+  }
+
+  verificaTitleStatus(status) {
+    return FormataStatus.retornaTitle(status);
+  }
 }

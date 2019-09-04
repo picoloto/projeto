@@ -5,18 +5,32 @@ body
     box-sizing: border-box
     -webkit-font-smoothing: antialiased
     -moz-osx-font-smoothing: grayscale
-
+    .ui-button.ui-button-icon-only.ui-button-rounded
+        //width: 100% !important
+        border-radius: 50% !important
+    .ui-button.ui-state-default.ui-button-secondary:enabled:focus,
+    .ui-buttonset.ui-button-secondary > .ui-button.ui-state-default:enabled:focus
+        box-shadow: none
+    .ui-button:enabled:active
+        box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.15) !important
+    .ui-table
+        .ui-table-thead > tr > th
+            padding: 0.571em 0.857em
+            border: none
+            font-weight: 700
+            color: #333333
+            background-color: #f4f4f4
+            border-bottom: 2px solid #5b2f6e
+            border-top-left-radius: 3px
+            border-top-right-radius: 3px
+        .ui-table-tbody
+            border: none
+        .ui-table-tbody > tr > td
+            border: none
+            text-align: center
+        
 .content
     margin: 12px 10px
-
-body
-    .ui-button.ui-button-icon-only.ui-button-rounded
-        width: 100% !important
-        border-radius: 50% !important
-body
-    .ui-button.ui-state-default.ui-button-secondary:enabled:focus,
-        body .ui-buttonset.ui-button-secondary > .ui-button.ui-state-default:enabled:focus
-            box-shadow: none
 p-header
     .p-grid
         height: 100%

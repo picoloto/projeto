@@ -1,69 +1,134 @@
 <div class="content">
-  <div class="p-grid">
+  <div class="p-grid p-justify-center">
 
-    <div class="p-col-12 p-lg-6">
-      <p-panel class="panel-custom">
-        <p-header>
-          <div class="p-grid">
-            <div class="p-col">
-              <span class="ui-panel-title">Status dos serviços de Nfe</span>
-              <br>
-              <span class="subtitle">
-                <span *ngIf="dataHoraConsulta && !carregandoStatusAtualNfe">
-                  Data/Hora consulta: {{dataHoraConsulta | dataHora}}
-                </span>
-                <app-generic-loading width="17px" height="17px" *ngIf="carregandoStatusAtualNfe"></app-generic-loading>
-              </span>
-            </div>
-            <div class="p-col-fixed coluna-fixa-botoes-titulo-panel">
-              <button pButton type="button" icon="pi pi-refresh" class="ui-button-rounded ui-button-secondary"
-                (click)="recarregarNfeAtualClick()"></button>
-            </div>
-          </div>
-        </p-header>
-
-        <div style="width: 100%; margin-bottom: 8px;" *ngIf="estados && estados.length > 0">
+    <div class="p-col-12 p-md-6">
+      <div class="p-grid p-justify-between">
+        <div class="p-col" style="min-width: 280px;">
+          <h3 style="margin: 4px; ">Status atuais dos serviços de Nfe</h3>
+        </div>
+        <div class="p-col-fixed" style="width: 190px;">
           <p-dropdown [options]="estados" filter="true" placeholder="Filtrar por estado" [showClear]="true"
-            [style]="{'width': '178px'}" (onChange)="onChangeEstado($event)"></p-dropdown>
+            [style]="{'width': '178px'}" (onChange)="onChangeEstado($event)" *ngIf="estados && estados.length > 0">
+          </p-dropdown>
         </div>
-
-        <app-generic-loading width="30px" height="30px" *ngIf="carregandoStatusAtualNfe"></app-generic-loading>
-
-        <div class="p-grid" *ngIf="!carregandoStatusAtualNfe">
-          <div class="p-col-12 p-sm-6">
-            <b class="versao">Versão {{numeroVersaoAntiga}}</b>
-            <app-generic-table [statusAtualNfe]="statusAtualNfeAntiga"></app-generic-table>
-          </div>
-          <div class="p-col-12 p-sm-6">
-            <b class="versao">Versão {{numeroVersaoNova}}</b>
-            <app-generic-table [statusAtualNfe]="statusAtualNfeNova"></app-generic-table>
-          </div>
+        <div class="p-col-fixed coluna-fixa-botoes-titulo-panel">
+          <button pButton type="button" icon="pi pi-refresh" class="ui-button-rounded ui-button-secondary"
+            (click)="recarregarNfeAtualClick()"></button>
         </div>
-      </p-panel>
+      </div>
+      <div class="p-grid">
+        <div class="p-col-12 p-lg-6">
+          <p-panel class="panel-custom panel-no-padding" header="Versão {{numeroVersaoAntiga}}">
+
+            <app-generic-loading width="30px" height="30px" *ngIf="carregandoStatusAtualNfe"></app-generic-loading>
+
+            <div *ngIf="!carregandoStatusAtualNfe">
+              <app-status-table [statusAtualNfe]="statusAtualNfeAntiga"></app-status-table>
+            </div>
+
+          </p-panel>
+        </div>
+        <div class="p-col-12 p-lg-6">
+          <p-panel class="panel-custom panel-no-padding" header="Versão {{numeroVersaoNova}}">
+
+            <app-generic-loading width="30px" height="30px" *ngIf="carregandoStatusAtualNfe"></app-generic-loading>
+
+            <div *ngIf="!carregandoStatusAtualNfe">
+              <app-status-table [statusAtualNfe]="statusAtualNfeNova"></app-status-table>
+            </div>
+          </p-panel>
+        </div>
+      </div>
     </div>
 
-    <div class="p-col-12 p-lg-6">
-      <p-panel class="panel-custom">
-        <p-header>
-          <div class="p-grid">
-            <div class="p-col" style="display: flex; align-items: center;">
-              <span class="ui-panel-title">Indisponibilidade dos serviços de Nfe</span>
-            </div>
-            <div class="p-col-fixed coluna-fixa-botoes-titulo-panel">
-              <button pButton type="button" icon="pi pi-refresh" class="ui-button-rounded ui-button-secondary"
-                (click)="getIndisponibilidade()"></button>
-            </div>
-          </div>
-        </p-header>
+    <div class="p-col-12 p-sm-6 p-md-6 p-lg-5 p-xl-4">
+      <div class="p-grid">
+        <div class="p-col">
+          <h3 style="margin: 4px">Indisponibilidade dos serviços de Nfe</h3>
+        </div>
+        <div class="p-col-fixed coluna-fixa-botoes-titulo-panel">
+          <button pButton type="button" icon="pi pi-refresh" class="ui-button-rounded ui-button-secondary"
+            (click)="getIndisponibilidade()"></button>
+        </div>
+      </div>
+      <p-panel class="panel-custom panel-no-padding" header="Ranking geral">
 
         <app-generic-loading width="30px" height="30px" *ngIf="carregandoIndisponibilidade"></app-generic-loading>
 
-        <p-chart type="doughnut" [data]="indisponibilidades" [options]="opcoesGrafico"
-          *ngIf="!carregandoIndisponibilidade">
-        </p-chart>
-
+        <p-table [value]="indisponibilidades" *ngIf="!carregandoIndisponibilidade && indisponibilidades"
+          [responsive]="false" class="generic-table">
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 100px;">Autorizador</th>
+              <th style="width: 80px;">Quantidade</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-nfe>
+            <tr>
+              <td>{{nfe.uf}}</td>
+              <td>{{nfe.quantidade}}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td [attr.colspan]="2">
+                Nenhum resultado encontrado
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
       </p-panel>
+      <br>
+      <div style="width: 100%; margin-bottom: 24px;">
+        <button pButton type="button" label="Histórico por data" class="ui-button-raised"
+          style="width: 100%; height: 40px;" (click)="exibeModalHistorico()"></button>
+      </div>
     </div>
 
   </div>
 </div>
+
+<div class="footer-custom" *ngIf="dataHoraConsulta">
+    Data da consulta: {{dataHoraConsulta | dataHora}}
+  </div>
+  
+<p-dialog header="Histórico dos status por data" [(visible)]="modalHistorico"
+  [contentStyle]="{'overflow':'visible', 'min-width': '80vw', 'min-height': '70vh', 'max-width': '80vw', 'max-height': '70vh'}"
+  [draggable]="false" [resizable]="false" [modal]="true" [blockScroll]="true" [responsive]="true" [focusOnShow]="false" breakpoint="0">
+  <div class="p-grid">
+    <div class="p-col-12">
+      <p-calendar [showIcon]="true" placeholder="Informe a data" [locale]="ptbr" dateFormat="dd/mm/yy"
+        (onSelect)="onSelectData($event)"></p-calendar>
+    </div>
+    <div class="p-col-12">
+      <app-generic-loading width="30px" height="30px" *ngIf="carregandoHistoricoNfe"></app-generic-loading>
+
+      <p-table [value]="statusHistoricoNfe" *ngIf="!carregandoHistoricoNfe && statusHistoricoNfe" [responsive]="true"
+        class="generic-table" [scrollable]="true" scrollHeight="60vh" [virtualScroll]="true"
+        [totalRecords]="statusHistoricoNfe.length">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 100px;">Autorizador</th>
+            <th style="width: 100px;">Status</th>
+            <th style="width: 100px;">versao</th>
+            <th style="width: 100px;">Data/Hora</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-nfe>
+          <tr>
+            <td>{{nfe.autorizador}}</td>
+            <td [ngStyle]="{'color': verificaCorStatus(nfe.status)}" [attr.title]="verificaTitleStatus(nfe.status)"><i
+                class="pi pi-circle-on" style="text-align: center;"></i></td>
+            <td>{{nfe.versao}}</td>
+            <td>{{nfe.dataHoraStatus | dataHora}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div *ngIf="!carregandoHistoricoNfe && statusHistoricoNfe.length === 0"
+        style="width: 100%; text-align: center; padding: 8px;">
+        Nenhum resultado encontrado
+      </div>
+    </div>
+  </div>
+
+</p-dialog>

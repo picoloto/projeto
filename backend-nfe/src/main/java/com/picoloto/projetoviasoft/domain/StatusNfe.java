@@ -1,7 +1,7 @@
 package com.picoloto.projetoviasoft.domain;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,12 +25,12 @@ public class StatusNfe implements Serializable {
 	private String status;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "pt-BR", timezone = "America/Sao_Paulo")
-	private Date dataHoraStatus;
+	private LocalDateTime dataHoraStatus;
 
 	public StatusNfe() {
 	}
 
-	public StatusNfe(Integer id, String versao, String autorizador, String status, Date dataHoraStatus) {
+	public StatusNfe(Integer id, String versao, String autorizador, String status, LocalDateTime dataHoraStatus) {
 		super();
 		this.id = id;
 		this.versao = versao;
@@ -71,11 +71,11 @@ public class StatusNfe implements Serializable {
 		this.status = status;
 	}
 
-	public Date getDataHoraStatus() {
+	public LocalDateTime getDataHoraStatus() {
 		return dataHoraStatus;
 	}
 
-	public void setDataHoraStatus(Date dataHoraStatus) {
+	public void setDataHoraStatus(LocalDateTime dataHoraStatus) {
 		this.dataHoraStatus = dataHoraStatus;
 	}
 

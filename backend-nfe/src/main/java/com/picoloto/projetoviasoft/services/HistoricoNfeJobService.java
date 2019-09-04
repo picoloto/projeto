@@ -17,9 +17,12 @@ public class HistoricoNfeJobService {
 	@Autowired
 	private StatusNfeRepository statusNfeRepository;
 
+	@Autowired
+	private StatusNfeService statusNfeService;
+
 	@Scheduled(cron = "0 0/5 * 1/1 * ?")
 	public void armazenaStatusDoServicoJob() {
-		List<StatusNfe> nfes = StatusNfeService.verificaVersaoAutorizadorNfeAtual();
+		List<StatusNfe> nfes = statusNfeService.verificaVersaoAutorizadorNfeAtual();
 
 		statusNfeRepository.saveAll(nfes);
 	}

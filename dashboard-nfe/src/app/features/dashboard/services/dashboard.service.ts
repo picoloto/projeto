@@ -11,7 +11,7 @@ export class DashboardService {
 
   constructor(private http: HttpClient) { }
 
-  getStatusAtualNfe(uf): Observable<StatusNfe[]> {
+  getStatusAtualNfe(uf: string): Observable<StatusNfe[]> {
     const url = uf ? `${this.api}autorizadores?uf=${uf}` : `${this.api}`;
     return this.http.get<StatusNfe[]>(`${url}`);
   }
@@ -24,8 +24,7 @@ export class DashboardService {
     return this.http.get<any>(`${this.api}maiorIndisponibilidade`);
   }
 
-  getStatusNfePorDataHora(): Observable<any> {
-    const dataHora = '2019-09-01 15:35:00';
-    return this.http.get<any>(`${this.api}dataHoraStatus?dataHora=${dataHora}`);
+  getStatusNfePorDataHora(data): Observable<any> {
+    return this.http.get<any>(`${this.api}dataHoraStatus?data=${data}`);
   }
 }

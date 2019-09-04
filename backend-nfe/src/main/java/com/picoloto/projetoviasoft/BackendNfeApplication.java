@@ -6,17 +6,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class BackendNfeApplication { //implements CommandLineRunner
-	
-	/*@Autowired
-	private HistoricoNfeJobService service;*/ 
-	
+public class BackendNfeApplication {
+
 	public static void main(String[] args) {
 		SpringApplication.run(BackendNfeApplication.class, args);
 	}
-	
-	/*@Override
-	public void run(String... args) throws Exception {
-		service.verificaStatusDoServicoJob();
-	}*/
 }
